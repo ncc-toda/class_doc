@@ -21,23 +21,45 @@ alwaysApply: true
 --
 
 
-## Git運用ルール
+## Git 運用ルール
 
 このドキュメントでは、本プロジェクトにおける Git 運用のルールを定義します。
 
 ### ブランチ戦略
 
+授業資料リポジトリでは、シンプルな GitHub-Flow 風のブランチ戦略を採用します。
+
 #### メインブランチ
 
-- `main`: 本番環境用のブランチ。常に安定した状態を維持する
-- `develop`: 開発用のブランチ。機能実装後のマージ先
+- `main`: メインブランチ。常に安定した状態を維持する
 
 #### 作業ブランチ
 
-- `feature/#[issue番号]_[機能名]`: 新機能開発用
+- `feature/#[issue番号]_[作業概要]`: 作業用用
   - 例: `feature/#31_create_specification`
 
-作業ブランチは develop ブランチから派生させ、 マージ時には develop ブランチにマージする
+作業ブランチは main ブランチから派生させ、マージ時には main ブランチに直接マージします。
+
+#### ブランチ作成のベストプラクティス
+
+1. **ブランチ名は具体的かつ簡潔に**
+
+   - 何の作業を行うブランチなのかが一目でわかるようにする
+   - 長すぎるブランチ名は避ける
+
+2. **1 つのブランチで 1 つの機能/修正**
+
+   - 複数の機能や修正を 1 つのブランチで行わない
+   - 関連性のない変更は別々のブランチで行う
+
+3. **定期的に最新の main ブランチを取り込む**
+
+   - 長期間作業するブランチは、定期的に main ブランチの変更を取り込む
+   - コンフリクトを早期に発見し解決する
+
+4. **作業完了後はブランチを削除する**
+   - PR がマージされたら、作業ブランチは削除する
+   - 不要なブランチを残さないようにする
 
 ### コミットメッセージのルール
 
@@ -47,57 +69,58 @@ alwaysApply: true
 [type]: [内容] [emoji]
 ```
 
-#### typeの種類
+#### type の種類
 
-- `feat`: 新機能
-- `fix`: バグ修正
-- `docs`: ドキュメント関連
+- `feat`: 新規追加、更新
+- `fix`: 間違い訂正
 - `style`: コードスタイルの修正（フォーマットなど）
-- `refactor`: リファクタリング
-- `test`: テスト関連
 - `chore`: ビルドプロセスやツール関連
 - `build`: ビルド関連の変更
-- `ci`: CI関連の変更
+- `ci`: CI 関連の変更
 
 #### 絵文字の例
 
-- `:sparkles:`: ✨ (新機能)
-- `:bug:`: 🐛 (バグ修正)
-- `:memo:`: 📝 (ドキュメント)
-- `:hammer:`: 🔨 (リファクタリング)
-- `:package:`: 📦 (パッケージ関連)
-- `:test_tube:`: 🧪 (テスト)
+- `:sparkles:`: ✨ (新規追加)
+- `:bug:`: 🐛 (間違い訂正)
+- `:hammer:`: 🔨 (ドキュメント更新)
 - `:lipstick:`: 💄 (UI/スタイル関連)
-- `:rotating_light:`: 🚨 (Lint警告対応)
-- `:green_heart:`: 💚 (CI修正)
-- `:recycle:`: ♻️ (コードリファクタリング)
+- `:green_heart:`: 💚 (CI 修正)
 - `:technologist:`: 👨‍💻 (開発者ツール関連)
 
 #### コミットメッセージの例
 
 ```txt
-feat: :hammer: シーズン情報を表すドメインオブジェクトを作成
-docs: :memo: ゲームコンセプトをざっくり記載
-build: :package: auto_route を導入
+feat: :sparkles: Riverpod の説明資料を作成
+fix: :bug: typo を修正
 ```
 
-### Issue管理
+### Issue 管理
 
-#### Issueテンプレート
+#### Issue テンプレート
 
-プロジェクトでは以下のIssueテンプレートを使用します：
+プロジェクトでは以下の Issue テンプレートを使用します：
 
-1. **機能リクエスト** (`feature_request.md`)
-   - タイトル形式: `feat: [機能名]`
-   - ラベル: `enhancement`
+1. **新規授業資料リクエスト** (`feature_request.md`)
 
-2. **バグレポート** (`bug_report.md`)
-   - タイトル形式: `bug: [バグ内容]`
-   - ラベル: `bug`
-   - バグ発生環境、再現手順、期待される動作などを記載
+   - タイトル形式: `docs: 新規授業資料 - [資料名]`
+   - ラベル: `documentation, enhancement`
+   - 作成したい授業資料の概要、対象者・レベル、含めるべき内容などを記載
 
-3. **その他** (`other.md`)
-   - 上記に当てはまらない内容のIssue
+2. **ドキュメント更新リクエスト** (`document_update_request.md`)
+
+   - タイトル形式: `docs: 授業資料更新 - [資料名]`
+   - ラベル: `documentation, update`
+   - 更新が必要な授業資料、更新理由、現在の内容と更新案などを記載
+
+3. **ドキュメントエラー報告** (`documentation_error_report.md`)
+
+   - タイトル形式: `docs: [エラー内容]`
+   - ラベル: `docs`
+   - 発見したドキュメントの誤り、該当箇所、現在の記述内容と修正案などを記載
+
+4. **その他** (`other.md`)
+   - 上記に当てはまらない内容の Issue
+   - タイトル形式: `other: [内容]`
 
 #### GitHub CLI を使った Issue 作成
 
@@ -105,13 +128,16 @@ GitHub CLI を使用して Issue を作成する場合は、以下のコマン�
 
 ```bash
 # 基本的なIssue作成
-gh issue create --title "feat: 機能名" --body "機能の詳細説明" --label "enhancement"
+gh issue create --title "docs: 新規授業資料 - 資料名" --body "資料の詳細説明" --label "documentation,enhancement"
 
-# テンプレートを使用したIssue作成
-gh issue create --template "feature_request.md" --title "feat: 機能名"
+# 新規授業資料リクエストの作成
+gh issue create --template "feature_request.md" --title "docs: 新規授業資料 - 資料名"
 
-# バグレポートの作成
-gh issue create --template "bug_report.md" --title "bug: バグ内容" --label "bug"
+# ドキュメント更新リクエストの作成
+gh issue create --template "document_update_request.md" --title "docs: 授業資料更新 - 資料名"
+
+# ドキュメントエラー報告の作成
+gh issue create --template "documentation_error_report.md" --title "docs: エラー内容" --label "docs"
 ```
 
 もしユーザーからの指示で Issue の作成を求められた場合は上記コマンドを使用して作成してください。
@@ -125,26 +151,32 @@ gh issue create --template "bug_report.md" --title "bug: バグ内容" --label "
 
 ### プルリクエスト（PR）のルール
 
-#### PRのテンプレート
+#### PR のテンプレート
 
-PRを作成する際は、`.github/pull_request_template.md`のテンプレートに従って以下の情報を記載します：
+PR を作成する際は、`.github/pull_request_template.md`のテンプレートに従って以下の情報を記載します：
 
-1. **対応するIssue**
+1. **対応する Issue**
+
    - `Closes #[Issue番号]`の形式で記載
 
 2. **リンク**
-   - タスク管理/整理用のNotionページや参考にしたサイト等
+
+   - タスク管理/整理用の Notion ページや参考にしたサイト等
 
 3. **やったこと**
+
    - 実装した内容の箇条書き
 
 4. **やらなかったこと**
+
    - 実装しなかった内容の箇条書き
 
 5. **ユーザーへの影響**
+
    - ユーザー視点での変更点
 
 6. **動作確認**
+
    - 確認した環境（デバイス/OS）
    - 確認した内容（スクリーンショットや動画も可）
    - 確認しなかった（できなかった）こと
@@ -152,7 +184,7 @@ PRを作成する際は、`.github/pull_request_template.md`のテンプレー�
 7. **その他**
    - 補足情報
 
-#### PRのタイトル
+#### PR のタイトル
 
 ```txt
 [type]: #[issue番号] [内容]
@@ -160,46 +192,48 @@ PRを作成する際は、`.github/pull_request_template.md`のテンプレー�
 
 例: `feat: #21 シーズン情報を表すドメインオブジェクトを作成`
 
-#### GitHub CLIを使ったPR作成
+#### GitHub CLI を使った PR 作成
 
-GitHub CLIを使用してPRを作成する場合は、以下のコマンドを使用します：
+GitHub CLI を使用して PR を作成する場合は、以下のコマンドを使用します：
 
 ```bash
 # 基本的なPR作成
-gh pr create --title "feat: #35 GitHub CLIルールの追加" --body "GitHub CLIを使ったIssueとPR作成のルールを追加" --base develop
+gh pr create --title "feat: #35 GitHub CLIルールの追加" --body "GitHub CLIを使ったIssueとPR作成のルールを追加" --base main
 
 # 現在のブランチからPRを作成（テンプレート使用）
 gh pr create --title "feat: #35 GitHub CLIルールの追加" --body-file .github/PULL_REQUEST_TEMPLATE.md
 
 # Issueに紐づけたPR作成
-gh pr create --title "feat: #35 GitHub CLIルールの追加" --body "Closes #35" --base develop
+gh pr create --title "feat: #35 GitHub CLIルールの追加" --body "Closes #35" --base main
 ```
 
-#### PR作成時の注意点
+#### PR 作成時の注意点
 
-- 作業ブランチが最新の`develop`ブランチと同期されていることを確認する
-- PRのタイトルは必ず`[type]: #[issue番号] [内容]`の形式で記載する
+- 作業ブランチが最新の`main`ブランチと同期されていることを確認する
+- PR のタイトルは必ず`[type]: #[issue番号] [内容]`の形式で記載する
 - テンプレートに従って必要な情報をすべて記入する
 - レビュアーを適切に設定する
-- 関連するIssueを`Closes #[Issue番号]`の形式で紐づける
+- 関連する Issue を`Closes #[Issue番号]`の形式で紐づける
 
 ### マージのルール
 
 1. **マージ条件**
-   - CIチェックがパスしていること
+
+   - CI チェックがパスしていること
    - 必要なレビューが完了していること
 
 2. **マージ方法**
+
    - 基本的に「Squash and merge」を使用
    - コミットメッセージは`[type]: #[issue番号] [内容] [emoji]`の形式に統一
 
 3. **マージ後**
    - 作業ブランチは削除する
-   - 関連するIssueをクローズする
+   - 関連する Issue をクローズする
 
-#### GitHub CLIを使ったPRのマージ
+#### GitHub CLI を使った PR のマージ
 
-GitHub CLIを使用してPRをマージする場合は、以下のコマンドを使用します：
+GitHub CLI を使用して PR をマージする場合は、以下のコマンドを使用します：
 
 ```bash
 # PRをSquashマージ
@@ -211,56 +245,70 @@ gh pr merge --squash --delete-branch
 
 ### リリース管理
 
-1. **バージョニング**
-   - セマンティックバージョニング（`MAJOR.MINOR.PATCH`）に従う
-   - `pubspec.yaml`のバージョンを更新
+授業資料リポジトリでは、従来の意味でのリリースは行いませんが、以下のルールで資料の公開・管理を行います。
 
-2. **リリースブランチ**
-   - リリース準備時に`releases/[バージョン]`ブランチを作成
-   - `develop`ブランチからマージされたPRがクローズされると、自動的にタグが作成される
+1. **バージョン管理**
 
-3. **タグ付け**
-   - タグは`v[バージョン]`の形式（例: `v1.0.0`）
-   - リリースノートは自動生成される
+   - 必要に応じて、重要な更新や区切りの良いタイミングでタグを付ける
+   - タグは`v[年].[学期].[更新番号]`の形式（例: `v2025.1.0`）で管理
 
-### CI/CD
+2. **タグ付け**
 
-1. **CI**
-   - プッシュ時およびPR時に自動的にチェックが実行される
-   - Markdown（`.md`）ファイルの変更のみの場合はスキップされる
+   - 重要な更新が完了した際に、main ブランチにタグを付ける
+   - タグには簡潔な説明を付け、その更新で何が変わったかを記録する
 
-2. **CD**
-   - リリースブランチがマージされた際に自動的にタグ付けとリリースノート生成が行われる
+3. **資料の公開**
+   - 授業資料は常に最新の main ブランチの内容を参照する
+   - 過去のバージョンが必要な場合は、タグを指定して参照する
+
+<!-- Todo -->
+<!-- ### CI/CD
+
+授業資料リポジトリでは、以下の CI/CD 設定を活用します：
+
+1. **自動チェック**
+
+   - Markdown の文法チェック
+   - リンク切れの検出
+   - 画像の最適化
+
+2. **自動デプロイ**
+   - main ブランチへのマージ時に、自動的に GitHub Pages に公開
+   - プレビュー環境として、PR ごとにプレビューサイトを自動生成 -->
 
 ### その他のルール
 
 1. **コードレビュー**
-   - PRを出す前に自己レビューを行う
+
+   - PR を出す前に自己レビューを行う
    - コメントには建設的な提案を含める
 
 2. **コンフリクト解決**
-   - コンフリクトは作業ブランチ側で解決する
-   - 必要に応じて`develop`ブランチを定期的にマージする
 
-3. **GitHub CLIの活用**
-   - 効率的な開発ワークフローのために、GitHub CLIを積極的に活用する
+   - コンフリクトは作業ブランチ側で解決する
+   - 必要に応じて`main`ブランチを定期的にマージする
+
+3. **GitHub CLI の活用**
+
+   - 効率的な開発ワークフローのために、GitHub CLI を積極的に活用する
    - 主要なコマンドは以下の通り：
+
      ```bash
      # Issueの一覧表示
      gh issue list
-     
+
      # 特定のIssueの詳細表示
      gh issue view [Issue番号]
-     
+
      # PRの一覧表示
      gh pr list
-     
+
      # 特定のPRの詳細表示
      gh pr view [PR番号]
-     
+
      # PRのチェックアウト
      gh pr checkout [PR番号]
-     
+
      # PRのレビュー
      gh pr review [PR番号] --approve
      ```
