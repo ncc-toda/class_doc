@@ -1,0 +1,23 @@
+---
+description: this file explains documentation concepts, please always refer to this file first
+globs: *
+alwaysApply: false
+---
+
+# 010_doc_concepts.mdc
+- このファイルが読み込まれたら「010_doc_concepts.mdcを読み込みました！」と作業着手前にユーザーに必ず伝えてください。
+
+--
+
+## 授業資料ガイドライン
+
+### 基本方針
+
+- 明確で簡潔であること
+- 読み手の心理的安全性を考慮した言葉遣いを使用すること
+- 遊び心を持ち、絵文字をふんだんに使用すること
+- 曖昧な表現を避け、具体的な数値や条件を明記すること
+
+--
+
+
